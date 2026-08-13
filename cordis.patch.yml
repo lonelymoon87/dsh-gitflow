@@ -1,0 +1,4 @@
+# Added when a DeepSeek Harness profile installs the dsh-gitflow bundle.
+- insert:
+    - id: gitflow
+      name: dsh-gitflow
