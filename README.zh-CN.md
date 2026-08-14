@@ -7,7 +7,7 @@
 
 面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的 Git 状态、diff、日志、提交、分支和可选恢复点工具集。
 
-可安装的 v0.1.1 面向 DSH 0.1.0-rc.6；npm 是后续可选的额外分发渠道。
+可安装的 v0.1.2 面向 DSH 0.1.0-rc.6。本项目当前通过 GitHub Release 分发预构建包，尚未发布 npm 包。
 
 [English](./README.md)
 
@@ -32,27 +32,27 @@ GitFlow 不会隐式暂存文件，也不会执行 `git add`、`git reset`、`gi
 
 ## 与 Change Ledger 的关系
 
-[dsh-turn-rewind](https://github.com/Anionex/dsh-turn-rewind) 负责工作区快照、恢复计划、救援点、过期计划检查和恢复后验证。GitFlow 不再实现第二套 stash 或 commit-tree 恢复引擎。
+[dsh-turn-rewind](https://github.com/Anionex/dsh-turn-rewind) 负责工作区快照、恢复计划、救援点、过期计划检查和恢复后验证。GitFlow 不另外实现 stash 或 commit-tree 恢复引擎。
 
-没有挂载兼容的 `ctx.changeLedger` 服务时，普通 Git 工具照常工作，检查点工具会明确提示配置缺失。恢复点本身已经是持久事实源，因此插件不会再用必需的自定义会话事件复制一份状态。
+没有挂载兼容的 `ctx.changeLedger` 服务时，普通 Git 工具照常工作，检查点工具会明确提示配置缺失。恢复点本身已经是持久事实源，因此插件不另用必需的自定义会话事件复制状态。
 
 ## 安装
 
 当前代码面向 DSH `0.1.0-rc.6` 插件 API，要求 Node.js `^22.19 || >=24`。
 
 ```sh
-dsh plugin --profile web add https://github.com/lonelymoon87/dsh-gitflow/releases/download/v0.1.1/dsh-gitflow-0.1.1.tgz
+dsh plugin --profile web add https://github.com/lonelymoon87/dsh-gitflow/releases/download/v0.1.2/dsh-gitflow-0.1.2.tgz
 ```
 
-Release tarball 已预构建，不需要构建权限。也可以固定版本从源码安装：
+Release tarball 已预构建，不需要构建权限。也可以固定版本从源码安装。
 
 ```sh
-dsh plugin --profile web add github:lonelymoon87/dsh-gitflow#v0.1.1
+dsh plugin --profile web add github:lonelymoon87/dsh-gitflow#v0.1.2
 ```
 
-源码安装会运行本包的 `prepare` 构建。pnpm 10 及以上版本默认拒绝执行，第一次安装失败时请按 DSH 输出的提示，将准确的包键加入 profile 的构建白名单，然后重新执行同一条命令。需要装进一次性 Agent 表面时，把命令中的 `web` 换成 `headless`。
+源码安装会运行本包的 `prepare` 构建。pnpm 10 及以上版本默认拒绝执行，第一次安装失败时请按 DSH 输出的提示，将准确的包键加入 profile 的构建白名单，然后重新执行同一条命令。需要装进一次性 Agent profile 时，把命令中的 `web` 换成 `headless`。
 
-升级时用新版本的 Release URL 再执行一次 `dsh plugin add`。卸载命令：
+升级时用新版本的 Release URL 再执行一次 `dsh plugin add`。卸载时执行
 
 ```sh
 dsh plugin --profile web remove dsh-gitflow
@@ -77,13 +77,13 @@ dsh plugin --profile web remove dsh-gitflow
       - git_branch
 ```
 
-`autoCheckpoint` 默认关闭。即使开启但没有 Change Ledger，插件也不会假装已经具备恢复能力。
+`autoCheckpoint` 默认关闭。即使开启但没有 Change Ledger，工具调用也会照常执行，插件不会假装已经具备恢复能力。
 
 ## 发布验证
 
 测试使用真实临时 Git 仓库，覆盖状态、暂存与未暂存 diff、提交、分支、空仓库、审批、自动检查点和两阶段恢复委托。
 
-- v0.1.1 tarball 已从 HTTPS Release URL 直接安装进全新 DSH profile；
+- v0.1.2 tarball 已从 HTTPS Release URL 直接安装进全新 DSH profile；
 - pack 产物与固定版本 GitHub 源码安装均通过 `dsh --dump-config` 检查；
 - CI 覆盖 Node 22.19 与 Node 24，定时任务会用 `@deepseek-ai/dsh@latest` 重跑真实安装；
 - bug 与兼容性问题统一进入 [GitHub Issues](https://github.com/lonelymoon87/dsh-gitflow/issues)。
