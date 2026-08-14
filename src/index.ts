@@ -24,6 +24,15 @@ const DEFAULT_MAX_LOG_ENTRIES = 100
 const DEFAULT_CHECKPOINT_TOOLS = ['write', 'edit', 'str_replace_editor', 'git_commit', 'git_branch']
 const PACKAGE_ROOT = fileURLToPath(new URL('../', import.meta.url))
 const CONVENTIONAL_COMMIT = /^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(?:\([a-z0-9._/-]+\))?!?: .+$/u
+const BRANCH_CALL_TITLES = {
+  list: 'List Git branches',
+  create: 'Create Git branch',
+  switch: 'Switch Git branch',
+} as const
+const RESTORE_CALL_TITLES = {
+  plan: 'Plan workspace restore',
+  apply: 'Apply workspace restore',
+} as const
 
 /** Deployment configuration for Git execution and optional restore points. */
 export interface Config {
@@ -484,7 +493,7 @@ export function apply(ctx: Context, config: Config = {}): void {
       }
       return parseBranches((await runGit(ctx, cwd, ['branch', '--list', '--no-color'], exec.signal, resolved)).stdout)
     },
-    presentCall: args => ({ card: 'generic', title: `${args.action} Git branch`, kind: args.action === 'list' ? 'read' : 'execute', rawInput: args.name }),
+    presentCall: args => ({ card: 'generic', title: BRANCH_CALL_TITLES[args.action], kind: args.action === 'list' ? 'read' : 'execute', rawInput: args.name }),
   }))
 
   ctx.tools.register(defineTool({
@@ -608,7 +617,7 @@ export function apply(ctx: Context, config: Config = {}): void {
         restoredPaths: [...result.restoredPaths],
       }
     },
-    presentCall: args => ({ card: 'generic', title: `${args.action} workspace restore`, kind: args.action === 'plan' ? 'read' : 'edit', rawInput: args.restore_point_id ?? args.plan_id }),
+    presentCall: args => ({ card: 'generic', title: RESTORE_CALL_TITLES[args.action], kind: args.action === 'plan' ? 'read' : 'edit', rawInput: args.restore_point_id ?? args.plan_id }),
   }))
 
   ctx.systemPrompt.section({

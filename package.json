@@ -1,7 +1,7 @@
 {
   "name": "dsh-gitflow",
-  "version": "0.1.1",
-  "description": "Git status, diff, commit, branch, and optional Change Ledger tools for DeepSeek Harness.",
+  "version": "0.1.2",
+  "description": "Git status, diff, log, commit, branch, and optional Change Ledger tools for DeepSeek Harness.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

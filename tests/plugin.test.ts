@@ -12,6 +12,7 @@ import { apply, parseLog, parseStatus } from '../src/index.ts'
 interface CapturedTool {
   readonly name: string
   execute(args: Record<string, unknown>, exec: { agent?: object; signal: AbortSignal }): Promise<unknown>
+  presentCall?(args: Record<string, unknown>): { readonly title: string }
 }
 
 type PreExecuteListener = (exec: ToolExecution, next: () => Promise<PreToolDecision>) => Promise<PreToolDecision>
@@ -140,6 +141,10 @@ describe('real Git workflow', () => {
         'checkpoint_list',
         'checkpoint_restore',
       ])
+      expect(tool(tools, 'git_branch').presentCall?.({ action: 'list' }).title).toBe('List Git branches')
+      expect(tool(tools, 'git_branch').presentCall?.({ action: 'switch', name: 'main' }).title).toBe('Switch Git branch')
+      expect(tool(tools, 'checkpoint_restore').presentCall?.({ action: 'plan', restore_point_id: 'rp-1' }).title).toBe('Plan workspace restore')
+      expect(tool(tools, 'checkpoint_restore').presentCall?.({ action: 'apply', plan_id: 'plan-1' }).title).toBe('Apply workspace restore')
 
       await writeFile(join(cwd, 'tracked.txt'), 'one\ntwo\n')
       await writeFile(join(cwd, 'untracked.txt'), 'new\n')
