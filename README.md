@@ -7,7 +7,7 @@
 
 Git status, diff, log, commit, branch, and optional restore-point tools for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
-The installable v0.1.0 release targets DSH 0.1.0-rc.6. npm publication is an optional future distribution channel.
+The installable v0.1.1 release targets DSH 0.1.0-rc.6. npm publication is an optional future distribution channel.
 
 [简体中文](./README.zh-CN.md)
 
@@ -41,13 +41,13 @@ When no compatible `ctx.changeLedger` service is mounted, ordinary Git tools con
 The package currently targets DSH `0.1.0-rc.6` plugin APIs and Node.js `^22.19 || >=24`.
 
 ```sh
-dsh plugin --profile default add https://github.com/lonelymoon87/dsh-gitflow/releases/download/v0.1.0/dsh-gitflow-0.1.0.tgz
+dsh plugin --profile default add https://github.com/lonelymoon87/dsh-gitflow/releases/download/v0.1.1/dsh-gitflow-0.1.1.tgz
 ```
 
 The release tarball is prebuilt and needs no build allowance. A pinned source install is also supported:
 
 ```sh
-dsh plugin --profile default add github:lonelymoon87/dsh-gitflow#v0.1.0
+dsh plugin --profile default add github:lonelymoon87/dsh-gitflow#v0.1.1
 ```
 
 The source install runs this package's `prepare` build. pnpm 10 and later reject it until the profile allowlists the exact package key printed by the failed command; apply that instruction and rerun the same `dsh plugin add` command.
@@ -83,7 +83,7 @@ dsh plugin --profile default remove dsh-gitflow
 
 The test suite uses real temporary Git repositories. It covers dirty status, staged and unstaged diffs, commits, branch creation, unborn history, approval decisions, automatic checkpoint delegation, and two-phase restore delegation.
 
-- The v0.1.0 tarball installs directly from its HTTPS release URL into a clean DSH profile.
+- The v0.1.1 tarball installs directly from its HTTPS release URL into a clean DSH profile.
 - The packed bundle and pinned GitHub source install both appear in `dsh --dump-config`.
 - CI covers Node 22.19 and Node 24; a scheduled workflow repeats the real install against `@deepseek-ai/dsh@latest`.
 - Bugs and compatibility reports are tracked in [GitHub Issues](https://github.com/lonelymoon87/dsh-gitflow/issues).
