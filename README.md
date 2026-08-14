@@ -2,7 +2,7 @@
 
 Git status, diff, log, commit, branch, and optional restore-point tools for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
-> Early development: the public repository is reserved, but the package has not yet been published to npm.
+> Early development: install from the GitHub release while npm publication is pending.
 
 [简体中文](./README.zh-CN.md)
 
@@ -31,16 +31,21 @@ Mutating tool calls pass through the DSH approval seam. Direct command handlers 
 
 When no compatible `ctx.changeLedger` service is mounted, ordinary Git tools continue to work and checkpoint tools fail with a configuration message. Because the restore point is already the durable source of truth, GitFlow does not duplicate it into required custom session events.
 
-## Development install
+## Install
 
 The package currently targets DSH `0.1.0-rc.6` plugin APIs and Node.js `^22.19 || >=24`.
 
 ```sh
-pnpm install
-pnpm run check
-npm pack
 dsh plugin --profile default add ./dsh-gitflow-0.1.0.tgz
 ```
+
+Download the tarball from the latest GitHub release. A pinned source install is also supported:
+
+```sh
+dsh plugin --profile default add github:lonelymoon87/dsh-gitflow#v0.1.0
+```
+
+The source install runs this package's `prepare` build. pnpm 10 and later reject it until the profile allowlists the exact package key printed by the failed command; apply that instruction and rerun the same `dsh plugin add` command. The release tarball is prebuilt and needs no build allowance.
 
 ## Configuration
 

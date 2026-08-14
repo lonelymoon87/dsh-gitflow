@@ -2,7 +2,7 @@
 
 面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的 Git 状态、diff、日志、提交、分支和可选恢复点工具集。
 
-> 目前处于早期开发阶段。公开仓库已经建立，npm 包尚未发布。
+> 目前处于早期开发阶段。npm 发布尚未完成，现阶段请从 GitHub Release 安装。
 
 [English](./README.md)
 
@@ -31,16 +31,21 @@ GitFlow 不会隐式暂存文件，也不会执行 `git add`、`git reset`、`gi
 
 没有挂载兼容的 `ctx.changeLedger` 服务时，普通 Git 工具照常工作，检查点工具会明确提示配置缺失。恢复点本身已经是持久事实源，因此插件不会再用必需的自定义会话事件复制一份状态。
 
-## 开发安装
+## 安装
 
 当前代码面向 DSH `0.1.0-rc.6` 插件 API，要求 Node.js `^22.19 || >=24`。
 
 ```sh
-pnpm install
-pnpm run check
-npm pack
 dsh plugin --profile default add ./dsh-gitflow-0.1.0.tgz
 ```
+
+请先从最新 GitHub Release 下载 tarball。也可以固定版本从源码安装：
+
+```sh
+dsh plugin --profile default add github:lonelymoon87/dsh-gitflow#v0.1.0
+```
+
+源码安装会运行本包的 `prepare` 构建。pnpm 10 及以上版本默认拒绝执行，第一次安装失败时请按 DSH 输出的提示，将准确的包键加入 profile 的构建白名单，然后重新执行同一条命令。Release tarball 已预构建，不需要构建权限。
 
 ## 配置
 
