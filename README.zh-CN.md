@@ -7,7 +7,7 @@
 
 面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的 Git 状态、diff、日志、提交、分支和可选恢复点工具集。
 
-可安装的 v0.1.2 面向 DSH 0.1.0-rc.6。本项目当前通过 GitHub Release 分发预构建包，尚未发布 npm 包。
+v0.1.3 已针对 DSH 0.1.0-rc.8 与 0.1.1-rc.1 验证，同时保留兼容 rc.6 的 peer 范围。项目继续通过 GitHub Release 分发预构建包，npm 发布已经准备完成但尚未上线。
 
 [English](./README.md)
 
@@ -36,18 +36,24 @@ GitFlow 不会隐式暂存文件，也不会执行 `git add`、`git reset`、`gi
 
 没有挂载兼容的 `ctx.changeLedger` 服务时，普通 Git 工具照常工作，检查点工具会明确提示配置缺失。恢复点本身已经是持久事实源，因此插件不另用必需的自定义会话事件复制状态。
 
+## 权限与数据
+
+- 只读工具通过 DSH shell service 在本机执行 `git status`、`git diff` 和 `git log`。提交与分支修改操作经过 DSH 审批。
+- 安装 Change Ledger service 并显式启用后，可选集成能够创建和恢复工作区检查点。
+- GitFlow 不读取凭据，不访问 Git 托管站点，不执行 push，也不注册自定义持久会话事件。Git 命令输出只返回当前 Agent 会话。
+
 ## 安装
 
-当前代码面向 DSH `0.1.0-rc.6` 插件 API，要求 Node.js `^22.19 || >=24`。
+当前代码支持 DSH `>=0.1.0-rc.6 <0.2.0` 插件 API，要求 Node.js `^22.19 || >=24`。
 
 ```sh
-dsh plugin --profile web add https://github.com/lonelymoon87/dsh-gitflow/releases/download/v0.1.2/dsh-gitflow-0.1.2.tgz
+dsh plugin --profile web add https://github.com/lonelymoon87/dsh-gitflow/releases/download/v0.1.3/dsh-gitflow-0.1.3.tgz
 ```
 
 Release tarball 已预构建，不需要构建权限。也可以固定版本从源码安装。
 
 ```sh
-dsh plugin --profile web add github:lonelymoon87/dsh-gitflow#v0.1.2
+dsh plugin --profile web add github:lonelymoon87/dsh-gitflow#v0.1.3
 ```
 
 源码安装会运行本包的 `prepare` 构建。pnpm 10 及以上版本默认拒绝执行，第一次安装失败时请按 DSH 输出的提示，将准确的包键加入 profile 的构建白名单，然后重新执行同一条命令。需要装进一次性 Agent profile 时，把命令中的 `web` 换成 `headless`。
@@ -83,9 +89,9 @@ dsh plugin --profile web remove dsh-gitflow
 
 测试使用真实临时 Git 仓库，覆盖状态、暂存与未暂存 diff、提交、分支、空仓库、审批、自动检查点和两阶段恢复委托。
 
-- v0.1.2 tarball 已从 HTTPS Release URL 直接安装进全新 DSH profile；
+- v0.1.3 tarball 已从 HTTPS Release URL 直接安装进全新的 DSH 0.1.0-rc.8 与 0.1.1-rc.1 profile；
 - pack 产物与固定版本 GitHub 源码安装均通过 `dsh --dump-config` 检查；
-- CI 覆盖 Node 22.19 与 Node 24，定时任务会用 `@deepseek-ai/dsh@latest` 重跑真实安装；
+- CI 覆盖 Node 22.19 与 Node 24，兼容矩阵会分别使用 DSH 0.1.0-rc.8、npm `latest` 与 `next` 标签重跑真实安装；
 - bug 与兼容性问题统一进入 [GitHub Issues](https://github.com/lonelymoon87/dsh-gitflow/issues)。
 
 ## 许可证
